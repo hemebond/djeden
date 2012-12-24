@@ -1,0 +1,19 @@
+body {
+	font-size: inherit;
+}
+
+.navbar-inner {	
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+}
+.navbar .brand {
+	background-image: url(/static/img/navbar-logo.png);
+	background-position: left center;
+	background-repeat: no-repeat;
+	padding-left: 30px;
+}
+
+.breadcrumb .dropdown-menu li {
+	display: block;
+}

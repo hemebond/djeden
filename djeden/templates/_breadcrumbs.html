@@ -1,0 +1,38 @@
+<div class="row-fluid">
+	<ul class="breadcrumb">
+		{% for crumb in breadcrumbs %}
+			{% if crumb.menu %}
+				<li class="btn-group active">
+					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						{{ crumb.label }}
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						{% for item in crumb.menu %}
+							<li>
+								<a href="{{ item.url }}">
+									{{ item.label }}
+								</a>
+							</li>
+						{% endfor %}
+					</ul>
+			{% else %}
+				<li>
+				{% if crumb.url %}
+					<a href="{{ crumb.url }}">
+				{% endif %}
+
+				{{ crumb.label }}
+
+				{% if crumb.url %}
+					</a>
+				{% endif %}
+			{% endif %}
+
+					{% if not forloop.last %}
+						<span class="divider">/</span>
+					{% endif %}
+				</li>
+		{% endfor %}
+	</ul>
+</div>

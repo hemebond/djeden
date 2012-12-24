@@ -1,0 +1,21 @@
+{% extends template_extends|default:"base_module.html" %}
+
+{% load i18n %}
+
+{% block title %}form.html{% endblock %}
+
+{% block content %}
+	<form action="{{ form_action }}" method="POST" class="form-horizontal">
+		{% csrf_token %}
+
+		{% for field in form %}
+			{% include "_form_field.html" %}
+		{% endfor %}
+
+		<div class="control-group">
+			<div class="controls">
+				<input type="submit" value="Save" class="btn btn-active">
+			</div>
+		</div>
+	</form>
+{% endblock %}

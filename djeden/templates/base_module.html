@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block base_content %}
+	{% include "_navbar.html" %}
+
+	<div class="container-fluid">
+		{% if breadcrumbs %}
+			{% include "_breadcrumbs.html" %}
+		{% endif %}
+
+		<div class="row-fluid">
+			<div class="span2">
+				<ul class="nav nav-list">
+					{% for section in menu %}
+						<li class="nav-header">{{ section.label }}</li>
+						{% for item in section.items %}
+							{% if item.active %}
+								<li class="active">
+							{% else %}
+								<li>
+							{% endif %}
+
+								<a href="{{ item.url }}">{{ item.label }}</a>
+							</li>
+						{% endfor %}
+					{% endfor %}
+				</ul>
+			</div>
+
+			<div class="span10">
+				{% block content %}{% endblock %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

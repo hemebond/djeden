@@ -1,0 +1,388 @@
+[
+	{
+		"fields": {
+			"name": "Agriculture"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 1
+	}, 
+	{
+		"fields": {
+			"name": "Camp Coordination and Management"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 2
+	}, 
+	{
+		"fields": {
+			"name": "Capacity Building"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 3
+	}, 
+	{
+		"fields": {
+			"name": "Coordination and Support Services"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 4
+	}, 
+	{
+		"fields": {
+			"name": "Early Recovery"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 5
+	}, 
+	{
+		"fields": {
+			"name": "Education"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 6
+	}, 
+	{
+		"fields": {
+			"name": "Emergency Shelter"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 7
+	}, 
+	{
+		"fields": {
+			"name": "Emergency Telecommunications"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 8
+	}, 
+	{
+		"fields": {
+			"name": "Environment"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 9
+	}, 
+	{
+		"fields": {
+			"name": "Food"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 10
+	}, 
+	{
+		"fields": {
+			"name": "Logistics"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 11
+	}, 
+	{
+		"fields": {
+			"name": "Multi-Sector"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 12
+	}, 
+	{
+		"fields": {
+			"name": "Nutrition"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 13
+	}, 
+	{
+		"fields": {
+			"name": "Protection"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 14
+	}, 
+	{
+		"fields": {
+			"name": "Security"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 15
+	}, 
+	{
+		"fields": {
+			"name": "Water Hygiene and Sanitation"
+		}, 
+		"model": "unocha.sector", 
+		"pk": 16
+	},
+
+	{
+		"fields": {
+			"name": "Aid co-ordination"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 1
+	}, 
+	{
+		"fields": {
+			"name": "Avian Influenza"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 2
+	}, 
+	{
+		"fields": {
+			"name": "Children"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 3
+	}, 
+	{
+		"fields": {
+			"name": "Civil/Military? Relations"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 4
+	}, 
+	{
+		"fields": {
+			"name": "Conflict Prevention"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 5
+	}, 
+	{
+		"fields": {
+			"name": "Demobilization, Disarmament and Reintegration"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 6
+	}, 
+	{
+		"fields": {
+			"name": "Disability"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 7
+	}, 
+	{
+		"fields": {
+			"name": "Drug Abuse"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 8
+	}, 
+	{
+		"fields": {
+			"name": "Education"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 9
+	}, 
+	{
+		"fields": {
+			"name": "Energy"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 10
+	}, 
+	{
+		"fields": {
+			"name": "Engagement with Non-State Actors"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 11
+	}, 
+	{
+		"fields": {
+			"name": "Environment and Sustainable Management"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 12
+	}, 
+	{
+		"fields": {
+			"name": "Food and Agriculture"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 13
+	}, 
+	{
+		"fields": {
+			"name": "Gender"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 14
+	}, 
+	{
+		"fields": {
+			"name": "Good Humanitarian Donorship (GHD)"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 15
+	}, 
+	{
+		"fields": {
+			"name": "Health and Disease Prevention"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 16
+	}, 
+	{
+		"fields": {
+			"name": "HIV/AIDS"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 17
+	}, 
+	{
+		"fields": {
+			"name": "Human Security"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 18
+	}, 
+	{
+		"fields": {
+			"name": "Information Management"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 19
+	}, 
+	{
+		"fields": {
+			"name": "Internally Displaced People"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 20
+	}, 
+	{
+		"fields": {
+			"name": "Management Development"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 21
+	}, 
+	{
+		"fields": {
+			"name": "Natural Diseases"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 22
+	}, 
+	{
+		"fields": {
+			"name": "NGOs"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 23
+	}, 
+	{
+		"fields": {
+			"name": "Orphanage"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 24
+	}, 
+	{
+		"fields": {
+			"name": "Other"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 25
+	}, 
+	{
+		"fields": {
+			"name": "Peace Building"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 26
+	}, 
+	{
+		"fields": {
+			"name": "Peacekeeping"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 27
+	}, 
+	{
+		"fields": {
+			"name": "Population"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 28
+	}, 
+	{
+		"fields": {
+			"name": "Poverty Eradication"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 29
+	}, 
+	{
+		"fields": {
+			"name": "Private Sector"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 30
+	}, 
+	{
+		"fields": {
+			"name": "Refugees and Returnees"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 31
+	}, 
+	{
+		"fields": {
+			"name": "Sanctions"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 32
+	}, 
+	{
+		"fields": {
+			"name": "Security"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 33
+	}, 
+	{
+		"fields": {
+			"name": "Technical co-operation with countries"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 34
+	}, 
+	{
+		"fields": {
+			"name": "Transfer and adaptation of technology"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 35
+	}, 
+	{
+		"fields": {
+			"name": "Transition"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 36
+	}, 
+	{
+		"fields": {
+			"name": "Transport, storage and logistics"
+		},
+		"model": "unocha.theme", 
+		"pk": 37
+	},
+	{
+		"fields": {
+			"name": "Water and Sanitation"
+		}, 
+		"model": "unocha.theme", 
+		"pk": 38
+	}, 
+	{
+		"fields": {
+			"name": "Youth "
+		}, 
+		"model": "unocha.theme", 
+		"pk": 39
+	}
+]

@@ -1,0 +1,18 @@
+{% extends "organisations/base.html" %}
+
+{% load i18n %}
+{% load sekizai_tags %}
+{% load djeden_extras %}
+
+{% block title %}organisations/form.html{% endblock %}
+
+{% block page_content %}
+	<form action="" method="POST">
+		{% csrf_token %}
+		<table>
+			{{ form }}
+		</table>
+		
+		<input type="submit" value="Save" class="btn btn-active">
+	</form>
+{% endblock %}

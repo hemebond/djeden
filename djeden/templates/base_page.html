@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block base_content %}
+	{% include "_navbar.html" %}
+
+	<div class="container-fluid">
+		{% if breadcrumbs %}
+			{% include "_breadcrumbs.html" %}
+		{% endif %}
+
+		<div class="row-fluid">
+			{% block content %}{% endblock %}
+		</div>
+	</div>
+{% endblock %}

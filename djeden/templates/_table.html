@@ -1,0 +1,47 @@
+{% load sekizai_tags %}
+{% load djeden_extras %}
+
+<table class="table table-bordered table-striped datatable">
+	<thead>
+		<tr>
+			{% if table.bulk_actions %}
+				<th></th>
+			{% endif %}
+
+			{% for column in table.columns %}
+				<th>{{ column.label|title }}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+		{% for record in table.records %}
+			<tr>
+				{% if table.bulk_actions %}
+					<td><input type="checkbox" value="{{ record.pk }}"></td>
+				{% endif %}
+
+				{% for cell in record.cells %}
+					<td>
+						{% if cell.url %}
+							<a href="{{ cell.url }}">
+						{% endif %}
+
+						{% if cell.type == "url" %}
+							{{ cell.value|urlize }}
+						{% elif cell.type == "list" %}
+							<ul>
+								{{ cell.value|unordered_list }}
+							</ul>
+						{% else %}
+							{{ cell.value }}
+						{% endif %}
+
+						{% if cell.url %}
+							</a>
+						{% endif %}
+					</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>

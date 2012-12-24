@@ -1,0 +1,38 @@
+{% extends template_extends|default:"base_module.html" %}
+
+{% load i18n %}
+
+{% block title %}detail.html{% endblock %}
+
+{% block content %}
+	<dl class="dl-horizontal">
+		{% for field in data %}
+			<dt>{{ field.label|title }}</dt>
+			<dd>
+				{% if field.value|length_is:"0" %}
+					None
+				{% elif field.type == "list" %}
+					<ul>
+						{{ field.value|unordered_list }}
+					</ul>
+				{% else %}
+					{{ field.value }}
+				{% endif %}
+			</dd>
+		{% endfor %}
+	</dl>
+
+	<form action="{{ form_action }}" method="POST" class="form-horizontal">
+		{% csrf_token %}
+
+		{% for field in form %}
+			{% include "_form_field.html" %}
+		{% endfor %}
+
+		<div class="control-group">
+			<div class="controls">
+				<input type="submit" value="Save" class="btn btn-active">
+			</div>
+		</div>
+	</form>
+{% endblock %}

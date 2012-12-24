@@ -1,0 +1,51 @@
+[
+	{
+		"fields": {
+			"name": "Donor"
+		}, 
+		"model": "organisations.organisationtype", 
+		"pk": 1
+	}, 
+	{
+		"fields": {
+			"name": "Government"
+		}, 
+		"model": "organisations.organisationtype", 
+		"pk": 2
+	}, 
+	{
+		"fields": {
+			"name": "International NGO"
+		}, 
+		"model": "organisations.organisationtype", 
+		"pk": 3
+	}, 
+	{
+		"fields": {
+			"name": "International Organization"
+		}, 
+		"model": "organisations.organisationtype", 
+		"pk": 4
+	}, 
+	{
+		"fields": {
+			"name": "Military"
+		}, 
+		"model": "organisations.organisationtype", 
+		"pk": 5
+	}, 
+	{
+		"fields": {
+			"name": "United Nations"
+		}, 
+		"model": "organisations.organisationtype", 
+		"pk": 6
+	}, 
+	{
+		"fields": {
+			"name": "Red Cross / Red Crescent"
+		}, 
+		"model": "organisations.organisationtype", 
+		"pk": 7
+	}
+]

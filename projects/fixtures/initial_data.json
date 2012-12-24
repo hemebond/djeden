@@ -1,0 +1,212 @@
+[
+	{
+		"fields": {
+			"name": "Proposed"
+		}, 
+		"model": "projects.status", 
+		"pk": 1
+	}, 
+	{
+		"fields": {
+			"name": "Current"
+		}, 
+		"model": "projects.status", 
+		"pk": 2
+	}, 
+	{
+		"fields": {
+			"name": "Completed"
+		}, 
+		"model": "projects.status", 
+		"pk": 3
+	},
+
+	{
+		"fields": {
+			"name": "Avalanche"
+		},
+		"model": "projects.hazard",
+		"pk": 1
+	},
+	{
+		"fields": {
+			"name": "Cold"
+		},
+		"model": "projects.hazard",
+		"pk": 2
+	},
+	{
+		"fields": {
+			"name": "Wave"
+		},
+		"model": "projects.hazard",
+		"pk": 3
+	},
+	{
+		"fields": {
+			"name": "Cyclone"
+		},
+		"model": "projects.hazard",
+		"pk": 4
+	},
+	{
+		"fields": {
+			"name": "Drought"
+		},
+		"model": "projects.hazard",
+		"pk": 5
+	},
+	{
+		"fields": {
+			"name": "Earthquake"
+		},
+		"model": "projects.hazard",
+		"pk": 6
+	},
+	{
+		"fields": {
+			"name": "Epidemic"
+		},
+		"model": "projects.hazard",
+		"pk": 7
+	},
+	{
+		"fields": {
+			"name": "Fire"
+		},
+		"model": "projects.hazard",
+		"pk": 8
+	},
+	{
+		"fields": {
+			"name": "Flood"
+		},
+		"model": "projects.hazard",
+		"pk": 9
+	},
+	{
+		"fields": {
+			"name": "Heat"
+		},
+		"model": "projects.hazard",
+		"pk": 10
+	},
+	{
+		"fields": {
+			"name": "Wave"
+		},
+		"model": "projects.hazard",
+		"pk": 11
+	},
+	{
+		"fields": {
+			"name": "Insect"
+		},
+		"model": "projects.hazard",
+		"pk": 12
+	},
+	{
+		"fields": {
+			"name": "Infestation"
+		},
+		"model": "projects.hazard",
+		"pk": 13
+	},
+	{
+		"fields": {
+			"name": "Land"
+		},
+		"model": "projects.hazard",
+		"pk": 14
+	},
+	{
+		"fields": {
+			"name": "Slide"
+		},
+		"model": "projects.hazard",
+		"pk": 15
+	},
+	{
+		"fields": {
+			"name": "Storm"
+		},
+		"model": "projects.hazard",
+		"pk": 16
+	},
+	{
+		"fields": {
+			"name": "Surge"
+		},
+		"model": "projects.hazard",
+		"pk": 17
+	},
+	{
+		"fields": {
+			"name": "Technological"
+		},
+		"model": "projects.hazard",
+		"pk": 18
+	},
+	{
+		"fields": {
+			"name": "Tornado"
+		},
+		"model": "projects.hazard",
+		"pk": 19
+	},
+	{
+		"fields": {
+			"name": "Tsunami"
+		},
+		"model": "projects.hazard",
+		"pk": 20
+	},
+	{
+		"fields": {
+			"name": "Volcano"
+		},
+		"model": "projects.hazard",
+		"pk": 21
+	},
+
+	{
+		"fields": {
+			"name": "Priority Action 1: Ensure that disaster risk reduction is a national and a local priority with a strong institutional basis for implementation.",
+			"description": "Countries that develop policy, legislative and institutional frameworks for disaster risk reduction and that are able to develop and track progress through specific and measurable indicators have greater capacity to manage risks and to achieve widespread consensus for, engagement in and compliance with disaster risk reduction measures across all sectors of society."
+		},
+		"model": "projects.hfa",
+		"pk": 1
+	},
+	{
+		"fields": {
+			"name": "Priority Action 2: Identify, assess and monitor disaster risks and enhance early warning.",
+			"description": "The starting point for reducing disaster risk and for promoting a culture of disaster resilience lies in the knowledge of the hazards and the physical, social, economic and environmental vulnerabilities to disasters that most societies face, and of the ways in which hazards and vulnerabilities are changing in the short and long term, followed by action taken on the basis of that knowledge."
+		},
+		"model": "projects.hfa",
+		"pk": 2
+	},
+	{
+		"fields": {
+			"name": "Priority Action 3: Use knowledge, innovation and education to build a culture of safety and resilience at all levels.",
+			"description": "Disasters can be substantially reduced if people are well informed and motivated towards a culture of disaster prevention and resilience, which in turn requires the collection, compilation and dissemination of relevant knowledge and information on hazards, vulnerabilities and capacities."
+		},
+		"model": "projects.hfa",
+		"pk": 3
+	},
+	{
+		"fields": {
+			"name": "Priority Action 4: Reduce the underlying risk factors.",
+			"description": "Disaster risks related to changing social, economic, environmental conditions and land use, and the impact of hazards associated with geological events, weather, water, climate variability and climate change, are addressed in sector development planning and programmes as well as in post-disaster situations."
+		},
+		"model": "projects.hfa",
+		"pk": 4
+	},
+	{
+		"fields": {
+			"name": "Priority Action 5: Strengthen disaster preparedness for effective response at all levels.",
+			"description": "At times of disaster, impacts and losses can be substantially reduced if authorities, individuals and communities in hazard-prone areas are well prepared and ready to act and are equipped with the knowledge and capacities for effective disaster management."
+		},
+		"model": "projects.hfa",
+		"pk": 5
+	}
+]

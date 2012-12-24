@@ -1,0 +1,14 @@
+{% extends "base_module.html" %}
+
+{% load i18n %}
+{% load sekizai_tags %}
+
+{% block title %}list.html{% endblock %}
+
+{% block content %}
+	{% include "_table.html" %}
+	{% include "_datatables.html" %}
+	{% addtoblock "js_ready" %}
+		$('.datatable').dataTable(plugin_options.datatables);
+	{% endaddtoblock %}
+{% endblock %}

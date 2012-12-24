@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block breadcrumbs %}
+	<ul class="breadcrumb">
+		<li class="active">{% trans "Organisations" %}</li>
+	</ul>
+{% endblock %}
+
+{% block content %}
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span2">
+				<ul class="nav nav-list">
+					{% for section in menu %}
+						<li class="nav-header">{{ section.label }}</li>
+						{% for item in section.items %}
+							{% if item.active %}
+								<li class="active">
+							{% else %}
+								<li>
+							{% endif %}
+
+								<a href="{{ item.url }}">{{ item.label }}</a>
+							</li>
+						{% endfor %}
+					{% endfor %}
+				</ul>
+			</div>
+
+			<div class="span10">
+				{% block page_content %}{% endblock %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

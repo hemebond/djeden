@@ -1,0 +1,35 @@
+div.dataTables_length select {
+	width: auto;
+}
+
+div.dataTables_info {
+	text-align: right;
+}
+
+div.dataTables_paginate {
+	margin: 0;
+	text-align: right;
+}
+
+table.table {
+	margin-bottom: 6px;
+	margin-top: 6px;
+}
+
+table.table thead .sorting,
+table.table thead .sorting_asc,
+table.table thead .sorting_desc,
+table.table thead .sorting_asc_disabled,
+table.table thead .sorting_desc_disabled {
+	cursor: pointer;
+	*cursor: hand;
+	padding-right: 16px;
+}
+
+table.table thead .sorting { background: url(/static/img/icon-chevron-both.png) no-repeat 98%; }
+table.table thead .sorting_asc { background: url(/static/img/icon-chevron-up.png) no-repeat 98%; }
+table.table thead .sorting_desc { background: url(/static/img/icon-chevron-down.png) no-repeat 98%; }
+
+table.dataTable th:active {
+	outline: none;
+}

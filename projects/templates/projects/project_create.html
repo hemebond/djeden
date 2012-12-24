@@ -1,0 +1,22 @@
+{% extends "projects/base.html" %}
+
+{% load i18n %}
+
+{% block title %}{{ object }}{% endblock %}
+
+{% block project_content %}
+	<div class="page-header">
+		<h1>{{ object }}</h1>
+	</div>
+
+
+	<form action="" method="POST">
+		{% csrf_token %}
+		<table>
+			{{ form }}
+		</table>
+		
+		<input type="submit">
+	</form>
+
+{% endblock %}

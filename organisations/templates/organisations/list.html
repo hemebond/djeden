@@ -1,0 +1,15 @@
+{% extends "organisations/base.html" %}
+
+{% load i18n %}
+{% load sekizai_tags %}
+{% load djeden_extras %}
+
+{% block title %}organisations/list.html{% endblock %}
+
+{% block page_content %}
+	{% include "_table.html" %}
+	{% include "_datatables.html" %}
+	{% addtoblock "js_ready" %}
+		$('.datatable').dataTable(plugin_options.datatables);
+	{% endaddtoblock %}
+{% endblock %}
