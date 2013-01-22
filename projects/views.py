@@ -5,8 +5,8 @@ from django.forms.models import inlineformset_factory
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 
-from djeden.views import ListView
-from djeden.views import DetailView
+from djeden.views.generic import ListView
+from djeden.views.generic import DetailView
 
 from rest_framework.response import Response
 

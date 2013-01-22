@@ -23,4 +23,14 @@ urlpatterns = patterns('organisations.views',
 		views.OrganisationTypeDetail.as_view(),
 		name="organisation-type-detail"
 	),
+	url(
+		r'^(?P<pk>\d+)/offices/(?:(?P<url_method>create)/)?$',
+		views.OrganisationOfficeList.as_view(),
+		name="organisation-detail-office-list"
+	),
+	url(
+		r'^offices/(?:(?P<url_method>create)/)?$',
+		views.OfficeList.as_view(),
+		name="organisation-office-list"
+	),
 )

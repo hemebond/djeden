@@ -11,7 +11,7 @@
 		<div class="row-fluid">
 			<div class="span2">
 				<ul class="nav nav-list">
-					{% for section in menu %}
+					{% for section in module_menu %}
 						<li class="nav-header">{{ section.label }}</li>
 						{% for item in section.items %}
 							{% if item.active %}

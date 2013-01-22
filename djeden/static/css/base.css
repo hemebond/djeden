@@ -17,3 +17,8 @@ body {
 .breadcrumb .dropdown-menu li {
 	display: block;
 }
+
+label, input, button, select, textarea {
+	font-size: 80%;
+	line-height: 80%;
+}

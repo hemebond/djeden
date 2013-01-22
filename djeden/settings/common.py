@@ -122,14 +122,15 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
 
     'sekizai',
-
     'rest_framework',
+	'mptt',
 
     'unocha',
     'kapua.locations',
     'organisations',
     'tasks',
     'projects',
+    'contact',
     'djeden',
 )
 

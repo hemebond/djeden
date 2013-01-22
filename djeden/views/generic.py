@@ -68,9 +68,6 @@ class ListView(MultipleObjectTemplateResponseMixin, ListCreateAPIView):
 				self.template_name_suffix
 			))
 
-			# the default list view template
-			names.append("list.html")
-
 		return names
 
 	def get(self, request, *args, **kwargs):

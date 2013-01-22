@@ -2,7 +2,7 @@ from django.db import models
 
 from unocha.models import Sector
 
-from kapua.locations.models import Country
+from kapua.locations.models import Country, Location
 
 
 class OrganisationType(models.Model):
@@ -39,15 +39,13 @@ class Organisation(models.Model):
 		Country,
 		verbose_name="home country",
 		blank=True,
-		null=True
+		null=True,
+		related_name="+",
 	)
+	offices = models.ManyToManyField(Location, blank=True, null=True)
 
 	def __unicode__(self):
 		return u"%s" % self.name
 
-
-# class StaffRecord(models.Model):
-# 	"""
-# 	The employee record
-# 	"""
-# 	person = 
+	class Meta:
+		ordering = ('name',)
