@@ -30,13 +30,22 @@ class OrganisationSerializer(serializers.HyperlinkedModelSerializer):
 class LocationSerializer(serializers.Serializer):
 	pk = serializers.Field()
 	name = serializers.Field()
+	organisation = serializers.SerializerMethodField("get_organisation")
+	country = serializers.SerializerMethodField("get_country")
 	ancestors = serializers.SerializerMethodField("get_ancestors")
 	type = serializers.Field(source="type.name")
 
+	def get_organisation(self, obj, *args, **kwargs):
+		return u"%s" % obj.organisation_set.all()[0]
+
+	def get_country(self, obj, *args, **kwargs):
+		qs = obj.get_root()
+		return u"%s" % qs
+
 	def get_ancestors(self, obj, *args, **kwargs):
-		print args
-		print kwargs
-		print obj
+		# print args
+		# print kwargs
+		# print obj
 		qs = obj.get_ancestors()
 		ancestors = []
 		for idx, ancestor in enumerate(qs):

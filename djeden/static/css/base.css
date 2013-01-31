@@ -2,23 +2,56 @@ body {
 	font-size: inherit;
 }
 
-.navbar-inner {	
+.navbar-inner {
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
 	border-radius: 0;
 }
 .navbar .brand {
 	background-image: url(/static/img/navbar-logo.png);
-	background-position: left center;
+	background-position: 4px center;
 	background-repeat: no-repeat;
-	padding-left: 30px;
+	padding-left: 36px;
+	text-shadow: none;
+	color: white;
 }
 
 .breadcrumb .dropdown-menu li {
 	display: block;
 }
 
-label, input, button, select, textarea {
-	font-size: 80%;
-	line-height: 80%;
+.navbar-inverse .navbar-inner {
+	background: #465060;
+	background: -moz-linear-gradient(top,  #465060 0%, #39424f 44%, #323a45 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#465060), color-stop(44%,#39424f), color-stop(100%,#323a45));
+	background: -webkit-linear-gradient(top,  #465060 0%,#39424f 44%,#323a45 100%);
+	background: -o-linear-gradient(top,  #465060 0%,#39424f 44%,#323a45 100%);
+	background: -ms-linear-gradient(top,  #465060 0%,#39424f 44%,#323a45 100%);
+	background: linear-gradient(to bottom,  #465060 0%,#39424f 44%,#323a45 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#465060', endColorstr='#323a45',GradientType=0 );
+	border: none;
+	box-shadow: -2px 0 15px rgba(0, 0, 0, 1.0);
+	color: white;
+}
+.navbar .nav > li > a {
+	border-top: 1px solid #555f6b;
+	text-shadow: none;
+	color: inherit;
+}
+.navbar .nav > li > a:focus,
+.navbar .nav > li > a:hover,
+.navbar .nav li.dropdown.open > .dropdown-toggle,
+.navbar .nav li.dropdown.active > .dropdown-toggle,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle {
+	background: #509dce;
+	background: -moz-linear-gradient(top,  #509dce 0%, #2c70b8 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#509dce), color-stop(100%,#2c70b8));
+	background: -webkit-linear-gradient(top,  #509dce 0%,#2c70b8 100%);
+	background: -o-linear-gradient(top,  #509dce 0%,#2c70b8 100%);
+	background: -ms-linear-gradient(top,  #509dce 0%,#2c70b8 100%);
+	background: linear-gradient(to bottom,  #509dce 0%,#2c70b8 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#509dce', endColorstr='#2c70b8',GradientType=0 );
+
+	border-top: 1px solid #72b0d8;
+	color: inherit;
 }

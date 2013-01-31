@@ -29,7 +29,17 @@ urlpatterns = patterns('organisations.views',
 		name="organisation-detail-office-list"
 	),
 	url(
+		r'^(?P<pk>\d+)/offices/(?:(?P<url_method>create)/)?$',
+		views.OfficeList.as_view(),
+		name="organisation-component-office-list"
+	),
+	url(
 		r'^offices/(?:(?P<url_method>create)/)?$',
+		views.OfficeList.as_view(),
+		name="organisation-office-list"
+	),
+	url(
+		r'^(?P<pk>\d+)/offices/(?P<office_pk>\d+)/(?:(?P<url_method>read|update|delete)/)?$',
 		views.OfficeList.as_view(),
 		name="organisation-office-list"
 	),

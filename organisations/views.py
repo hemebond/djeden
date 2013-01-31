@@ -426,7 +426,7 @@ class OrganisationDetail(SimpleModelFormMixin, RetrieveUpdateDestroyAPIView):
 					{
 						'label': _("Offices"),
 						'url': reverse(
-							'organisation-office-list',
+							'organisation-component-office-list',
 							kwargs={
 								'pk': self.object.pk,
 							}
@@ -643,6 +643,12 @@ class OfficeList(ListCreateAPIView):
 				'url': "",
 				# 'verbose_name': "name",
 				# 'type': "string",
+			},
+			{
+				'name': "organisation"
+			},
+			{
+				'name': "country",
 			},
 			{
 				'name': "ancestors",
