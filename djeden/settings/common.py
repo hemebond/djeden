@@ -83,9 +83,6 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = 'ymxjrpmzfx8et1yr33iyr9(z36dpktsksw(mw53%fxbhm0*)s$'
-
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -124,12 +121,14 @@ INSTALLED_APPS = (
     'sekizai',
     'rest_framework',
 	'mptt',
+    'django_filters',
 
     'unocha',
     'kapua.locations',
     'organisations',
     'tasks',
     'projects',
+    'places',
     'contact',
     'djeden',
 )
@@ -161,4 +160,8 @@ LOGGING = {
             'propagate': True,
         },
     }
+}
+
+REST_FRAMEWORK = {
+    'FILTER_BACKEND': 'rest_framework.filters.DjangoFilterBackend'
 }

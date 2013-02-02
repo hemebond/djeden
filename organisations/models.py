@@ -2,7 +2,8 @@ from django.db import models
 
 from unocha.models import Sector
 
-from kapua.locations.models import Country, Location
+from kapua.locations.models import Location
+from places.models import Country
 
 
 class OrganisationType(models.Model):

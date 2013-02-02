@@ -20,6 +20,11 @@ from string import capwords
 from djeden.mixins import SimpleModelFormMixin
 from djeden.mixins import SimpleFormMixin
 
+from django.views.generic.edit import FormMixin
+
+import django_filters
+import json
+
 
 def menu(active=None):
 	menu = [
@@ -263,10 +268,22 @@ class OfficeForm(forms.Form):
 	office = forms.CharField(max_length=255)
 
 
+class OrganisationFilter(django_filters.FilterSet):
+	# country = django_filters.CharFilter(name="country__code_alpha2")
+	# country = django_filters.CharFilter()
+
+	class Meta:
+		model = Organisation
+		fields = ['country']
+
 class OrganisationList(SimpleFormMixin, ListCreateAPIView):
 	renderer_classes = [TemplateHTMLRenderer, ] + api_settings.DEFAULT_RENDERER_CLASSES
 	model = Organisation
 	serializer_class = OrganisationSerializer
+	filter_class = OrganisationFilter
+
+	def get_initial(self):
+		return {}
 
 	def get_queryset(self):
 		"""
@@ -329,6 +346,8 @@ class OrganisationList(SimpleFormMixin, ListCreateAPIView):
 			},
 		]
 
+		context['json'] = json.dumps(serializer.data)
+
 		return context
 
 	def get(self, request, *args, **kwargs):
@@ -336,8 +355,10 @@ class OrganisationList(SimpleFormMixin, ListCreateAPIView):
 		method = kwargs.get('url_method', None)
 
 		if format == 'html':
-			self.object_list = self.get_queryset()
-			context = self.get_context_data(object_list=self.object_list)
+			queryset = self.get_queryset()
+			self.object_list = self.filter_queryset(queryset)
+			f = OrganisationFilter(request.GET, queryset=self.object_list)
+			context = self.get_context_data(object_list=self.object_list, filter=f)
 
 			if method == 'create':
 				template_name = "form.html"
@@ -607,7 +628,8 @@ class OrganisationOfficeList(ListCreateAPIView):
 		self.parent_object = Organisation.objects.get(pk=self.kwargs.get('pk'))
 
 		if format == 'html':
-			self.object_list = self.get_queryset()
+			queryset = self.get_queryset()
+			self.object_list = self.filter_queryset(queryset)
 			context = self.get_context_data(object_list=self.object_list)
 
 			if method == 'create':
@@ -677,7 +699,8 @@ class OfficeList(ListCreateAPIView):
 		method = kwargs.get('url_method', None)
 
 		if format == 'html':
-			self.object_list = self.get_queryset()
+			queryset = self.get_queryset()
+			self.object_list = self.filter_queryset(queryset)
 			context = self.get_context_data(object_list=self.object_list)
 
 			if method == 'create':
