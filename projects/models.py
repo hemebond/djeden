@@ -1,18 +1,13 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 #from tasks.models import Task
 import tasks
 from unocha.models import Sector, Theme
 from organisations.models import Sector, Organisation
-
-
-class Country(models.Model):
-	name = models.CharField(max_length=64)
-
-	def __unicode__(self):
-		return u"%s" % self.name
+from kapua.locations.models import Country
 
 
 class Currency(models.Model):
@@ -84,6 +79,9 @@ class Project(models.Model):
 
 	def __unicode__(self):
 		return u"%s" % self.name
+
+	def get_absolute_url(self):
+		return reverse('project_detail', kwargs={"pk": str(self.pk)})
 
 
 class OrganisationRole(models.Model):

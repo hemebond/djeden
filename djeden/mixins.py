@@ -1,9 +1,13 @@
 from django.shortcuts import HttpResponseRedirect
+from django.forms.models import modelform_factory
 
 
 class SimpleFormMixin(object):
 	form_class = None
 	success_url = None
+
+	def get_initial(self):
+		return {}
 
 	def get_form_kwargs(self):
 		kwargs = {}
@@ -15,13 +19,28 @@ class SimpleFormMixin(object):
 			})
 		return kwargs
 
-	def get_forms(self):
+	def get_form_class(self):
+		"""
+		Returns the form class to use in this view
+		"""
+		if self.form_class:
+			return self.form_class
+		else:
+			if self.model is not None:
+				# If a model has been explicitly provided, use it
+				model = self.model
+			else:
+				# Try to get a queryset and extract the model class
+				# from that
+				model = self.get_queryset().model
+
+		return modelform_factory(model)
+
+	def get_form(self):
 		"""
 			Returns a list of form objects
 		"""
-		return [
-			self.form_class()(**self.get_form_kwargs()),
-		]
+		return self.get_form_class()(**self.get_form_kwargs())
 
 	def get_formsets(self):
 		"""

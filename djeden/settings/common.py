@@ -124,11 +124,10 @@ INSTALLED_APPS = (
     'django_filters',
 
     'unocha',
-    'kapua.locations',
     'organisations',
     'tasks',
     'projects',
-    'places',
+    'kapua.locations',
     'contact',
     'djeden',
 )

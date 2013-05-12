@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from organisations.models import Organisation, OrganisationType
-from kapua.locations.models import Location
+from .models import Organisation, OrganisationType
 
 
 class OrganisationTypeSerializer(serializers.HyperlinkedModelSerializer):
@@ -9,7 +8,7 @@ class OrganisationTypeSerializer(serializers.HyperlinkedModelSerializer):
 
 	class Meta:
 		model = OrganisationType
-		view_name = 'organisation-type-detail'
+		view_name = 'organisation_type_detail'
 
 
 class OrganisationSerializer(serializers.HyperlinkedModelSerializer):
@@ -37,33 +36,4 @@ class OrganisationSerializer(serializers.HyperlinkedModelSerializer):
 	class Meta:
 		model = Organisation
 		depth = 1
-
-
-class LocationSerializer(serializers.Serializer):
-	pk = serializers.Field()
-	name = serializers.Field()
-	organisation = serializers.SerializerMethodField("get_organisation")
-	country = serializers.SerializerMethodField("get_country")
-	ancestors = serializers.SerializerMethodField("get_ancestors")
-	type = serializers.Field(source="type.name")
-
-	def get_organisation(self, obj, *args, **kwargs):
-		return u"%s" % obj.organisation_set.all()[0]
-
-	def get_country(self, obj, *args, **kwargs):
-		qs = obj.get_root()
-		return u"%s" % qs
-
-	def get_ancestors(self, obj, *args, **kwargs):
-		# print args
-		# print kwargs
-		# print obj
-		qs = obj.get_ancestors()
-		ancestors = []
-		for idx, ancestor in enumerate(qs):
-			ancestors.append(u"%s" % ancestor)
-		return u", ".join(ancestors)
-
-	class Meta:
-		model = Location
-		# fields = ('pk', 'name', 'ancestors')
+		view_name = 'organisation_detail'

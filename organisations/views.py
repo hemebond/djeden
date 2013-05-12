@@ -1,3 +1,7 @@
+import json
+
+# from string import capwords
+
 from rest_framework.settings import api_settings
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -6,45 +10,38 @@ from rest_framework.response import Response
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
 from django.shortcuts import HttpResponseRedirect
-from django.db.models.fields import FieldDoesNotExist
 from django import forms
-from django.forms.models import inlineformset_factory
+
+from djeden.utils import table_from_list, detail_from_dict, table_from_qs
+from djeden.views import ListView, DetailView
+
+from kapua.locations.serializers import OfficeSerializer
+from kapua.locations.models import Location, Country
 
 from .models import Organisation, OrganisationType
+from .filters import OrganisationFilter
 from .forms import OrganisationForm
-from djeden.serializers import OrganisationSerializer, OrganisationTypeSerializer, LocationSerializer
-from kapua.locations.models import Location, LocationType
-
-from string import capwords
-
-from djeden.mixins import SimpleModelFormMixin
-from djeden.mixins import SimpleFormMixin
-
-from django.views.generic.edit import FormMixin
-
-import django_filters
-import json
+from .serializers import (
+	OrganisationSerializer,
+	OrganisationTypeSerializer
+)
 
 
-def menu(active=None):
+def menu(current_url=None):
 	menu = [
 		{
 			'label': _("Organisations"),
 			'items': [
 				{
-					'label': _("Add Organisation"),
+					'label': _("List"),
+					'url': reverse('organisation_list'),
+				},
+				{
+					'label': _("New"),
 					'url': reverse(
-						'organisation-list',
+						'organisation_list',
 						kwargs={'url_method': "create"}
 					),
-				},
-				{
-					'label': _("List All"),
-					'url': reverse('organisation-list'),
-				},
-				{
-					'label': _("Search"),
-					'url': "",
 				},
 				{
 					'label': _("Import"),
@@ -56,23 +53,15 @@ def menu(active=None):
 			'label': _("Offices"),
 			'items': [
 				{
+					'label': _("List"),
+					'url': reverse('organisation_office_list'),
+				},
+				{
 					'label': _("New"),
 					'url': reverse(
-						'organisation-office-list',
+						'organisation_office_list',
 						kwargs={'url_method': "create"}
 					),
-				},
-				{
-					'label': _("List All"),
-					'url': reverse('organisation-office-list'),
-				},
-				{
-					'label': _("Map"),
-					'url': "",
-				},
-				{
-					'label': _("Search"),
-					'url': "",
 				},
 				{
 					'label': _("Import"),
@@ -84,19 +73,11 @@ def menu(active=None):
 			'label': _("Facilities"),
 			'items': [
 				{
+					'label': _("List"),
+					'url': "",
+				},
+				{
 					'label': _("New"),
-					'url': "",
-				},
-				{
-					'label': _("List All"),
-					'url': "",
-				},
-				{
-					'label': _("Map"),
-					'url': "",
-				},
-				{
-					'label': _("Search"),
 					'url': "",
 				},
 				{
@@ -109,15 +90,15 @@ def menu(active=None):
 			'label': _("Organisation Types"),
 			'items': [
 				{
-					'label': _("New"),
-					'url': reverse(
-						'organisation-type-list',
-						kwargs={'url_method': "create"},
-					),
+					'label': _("List"),
+					'url': reverse('organisation_type_list'),
 				},
 				{
-					'label': _("List All"),
-					'url': reverse('organisation-type-list'),
+					'label': _("New"),
+					'url': reverse(
+						'organisation_type_list',
+						kwargs={'url_method': "create"},
+					),
 				},
 			]
 		},
@@ -125,11 +106,11 @@ def menu(active=None):
 			'label': _("Office Types"),
 			'items': [
 				{
-					'label': _("New"),
+					'label': _("List"),
 					'url': "",
 				},
 				{
-					'label': _("List All"),
+					'label': _("New"),
 					'url': "",
 				},
 			]
@@ -138,11 +119,11 @@ def menu(active=None):
 			'label': _("Facility Types"),
 			'items': [
 				{
-					'label': _("New"),
+					'label': _("List"),
 					'url': "",
 				},
 				{
-					'label': _("List All"),
+					'label': _("New"),
 					'url': "",
 				},
 			]
@@ -151,103 +132,27 @@ def menu(active=None):
 			'label': _("Sectors"),
 			'items': [
 				{
-					'label': _("New"),
+					'label': _("List"),
 					'url': "",
 				},
 				{
-					'label': _("List All"),
+					'label': _("New"),
 					'url': "",
 				},
 			]
 		},
 	]
 
-	if active:
+	if current_url:
 		for group in menu:
 			for item in group['items']:
-				if item['url'] == active:
+				if item['url'] == current_url:
 					item['active'] = True
 
 	return menu
 
 
-def table_from_list(model, fields, data):
-	table = {
-		'columns': [],
-		'records': [],
-	}
 
-	for field in fields:
-		column = {}
-
-		if 'verbose_name' in field:
-			label = field['verbose_name']
-		else:
-			try:
-				label = model._meta \
-							 .get_field(field['name']) \
-							 .verbose_name
-			except FieldDoesNotExist:
-				label = field['name']
-
-		column['label'] = label
-
-		table['columns'].append(column)
-
-	for obj in data:
-		record = {
-			'pk': obj['pk'],
-			'cells': [],
-		}
-
-		for field in fields:
-			cell = {
-				'name': field['name'],
-				'value': obj[field['name']],
-				'type': field.get('type', None),
-			}
-
-			if "name" == field['name'] and 'url' in obj:
-				cell.update({'url': obj['url']})
-
-			record['cells'].append(cell)
-
-		table['records'].append(record)
-
-	return table
-
-
-def detail_from_dict(model, fields, data):
-	"""
-	data is serializer.data
-	"""
-
-	detail = []
-
-	if not fields:
-		fields = data.keys()
-
-	for field in fields:
-		try:
-			label = model._meta.get_field(field).verbose_name
-		except FieldDoesNotExist:
-			label = field
-
-		value = data[field]
-
-		if isinstance(value, list):
-			field_type = "list"
-		else:
-			field_type = "string"
-
-		detail.append({
-			'field': field,
-			'label': label,
-			'value': value,
-			'type': field_type,
-		})
-
-	return detail
 
 
 def cell(field,
@@ -259,7 +164,7 @@ def cell(field,
 
 class OfficeForm(forms.Form):
 	COUNTRIES = (
-		(x.id, x.name) for x in Location.objects.filter(type__name="Country")
+		(x.id, x.name) for x in Country.objects.all()
 	)
 	country = forms.CharField(
 		max_length=255,
@@ -268,34 +173,20 @@ class OfficeForm(forms.Form):
 	office = forms.CharField(max_length=255)
 
 
-class OrganisationFilter(django_filters.FilterSet):
-	# country = django_filters.CharFilter(name="country__code_alpha2")
-	# country = django_filters.CharFilter()
-
-	class Meta:
-		model = Organisation
-		fields = ['country']
-
-class OrganisationList(SimpleFormMixin, ListCreateAPIView):
-	renderer_classes = [TemplateHTMLRenderer, ] + api_settings.DEFAULT_RENDERER_CLASSES
+class OrganisationList(ListView):
 	model = Organisation
 	serializer_class = OrganisationSerializer
 	filter_class = OrganisationFilter
+	success_url = "/organisations/"
 
-	def get_initial(self):
-		return {}
-
-	def get_queryset(self):
-		"""
-			Fetch the filtered queryset and then order it by name
-		"""
-		queryset = super(OrganisationList, self).get_queryset()
-		return queryset.order_by('name')
+	def get_success_url(self):
+		return reverse(
+			'organisation_detail',
+			kwargs={'pk': self.object.pk},
+		)
 
 	def get_context_data(self, *args, **kwargs):
 		context = super(OrganisationList, self).get_context_data(*args, **kwargs)
-
-		serializer = self.serializer_class(self.object_list)
 
 		fields = [
 			{
@@ -310,13 +201,13 @@ class OrganisationList(SimpleFormMixin, ListCreateAPIView):
 			},
 			{
 				'name': "orgtype",
-				'verbose_name': "type",
+				# 'verbose_name': "type",
 				# 'type': "string",
 			},
 			{
 				'name': "sectors",
 				# 'verbose_name': "sectors",
-				'type': "list",
+				# 'type': "list",
 			},
 			{
 				'name': "country",
@@ -326,77 +217,42 @@ class OrganisationList(SimpleFormMixin, ListCreateAPIView):
 			{
 				'name': "website",
 				# 'verbose_name': "website",
-				'type': "url",
+				# 'type': "url",
 			},
 		]
 
+		print context['serialized_data']
+
 		context['table'] = table_from_list(
+			context['serialized_data'],
 			self.model,
 			fields,
-			serializer.data
 		)
 
-		if "form" not in context:
-			context['form'] = OrganisationForm(**self.get_form_kwargs())
+		# context['table'] = table_from_qs(
+		# 	self.object_list.queryset,
+		# 	field_list=fields
+		# )
 
-		context['module_menu'] = menu(self.request.get_full_path())
+		context['module_menu'] = menu(self.request.path)
 		context['breadcrumbs'] = [
 			{
 				'label': _("Organisations"),
 			},
 		]
 
-		context['json'] = json.dumps(serializer.data)
+		context['form_action'] = reverse('organisation_list')
+
+		context['tabs'] = ['maps']
+
+		context['json'] = json.dumps(context['serialized_data'])
+
+		context['filter'] = OrganisationFilter(self.request.GET)
 
 		return context
 
-	def get(self, request, *args, **kwargs):
-		format = request.accepted_renderer.format
-		method = kwargs.get('url_method', None)
 
-		if format == 'html':
-			queryset = self.get_queryset()
-			self.object_list = self.filter_queryset(queryset)
-			f = OrganisationFilter(request.GET, queryset=self.object_list)
-			context = self.get_context_data(object_list=self.object_list, filter=f)
-
-			if method == 'create':
-				template_name = "form.html"
-			else:
-				template_name = "list.html"
-
-			return Response(
-				context,
-				template_name=template_name,
-			)
-
-		return super(OrganisationList, self).get(request, *args, **kwargs)
-
-	def post(self, request, *args, **kwargs):
-		format = request.accepted_renderer.format
-
-		if format == 'html':
-			form = OrganisationForm(**self.get_form_kwargs())
-
-			if form.is_valid():
-				self.object = form.save()
-				return HttpResponseRedirect(self.get_success_url())
-
-			self.object_list = self.get_queryset()
-			context = self.get_context_data(
-				object_list=self.object_list,
-				form=form
-			)
-
-			return Response(
-				context,
-				template_name="form.html",
-			)
-
-		return super(OrganisationList, self).post(request, *args, **kwargs)
-
-
-class OrganisationDetail(SimpleModelFormMixin, RetrieveUpdateDestroyAPIView):
+class OrganisationDetail(DetailView):
 	renderer_classes = [TemplateHTMLRenderer, ] + api_settings.DEFAULT_RENDERER_CLASSES
 	model = Organisation
 	serializer_class = OrganisationSerializer
@@ -433,7 +289,7 @@ class OrganisationDetail(SimpleModelFormMixin, RetrieveUpdateDestroyAPIView):
 		context['breadcrumbs'] = [
 			{
 				'label': _("Organisations"),
-				'url': reverse('organisation-list')
+				'url': reverse('organisation_list')
 			},
 			{
 				'label': _(u"%s" % self.object),
@@ -447,7 +303,7 @@ class OrganisationDetail(SimpleModelFormMixin, RetrieveUpdateDestroyAPIView):
 					{
 						'label': _("Offices"),
 						'url': reverse(
-							'organisation-component-office-list',
+							'organisation_component_office_list',
 							kwargs={
 								'pk': self.object.pk,
 							}
@@ -479,7 +335,7 @@ class OrganisationDetail(SimpleModelFormMixin, RetrieveUpdateDestroyAPIView):
 			context['form'] = OrganisationForm(**self.get_form_kwargs())
 
 		context['form_action'] = reverse(
-			'organisation-detail',
+			'organisation_detail',
 			kwargs={'pk': self.object.pk},
 		)
 
@@ -516,7 +372,7 @@ class OrganisationDetail(SimpleModelFormMixin, RetrieveUpdateDestroyAPIView):
 				self.object = form.save()
 				return HttpResponseRedirect(
 					reverse(
-						'organisation-detail',
+						'organisation_detail',
 						kwargs={
 							'pk': self.object.pk,
 						}
@@ -549,7 +405,7 @@ class OrganisationTypeDetail(RetrieveUpdateDestroyAPIView):
 class OrganisationOfficeList(ListCreateAPIView):
 	renderer_classes = [TemplateHTMLRenderer, ] + api_settings.DEFAULT_RENDERER_CLASSES
 	model = Location
-	serializer_class = LocationSerializer
+	serializer_class = OfficeSerializer
 
 	def get_queryset(self):
 		return self.parent_object.offices.all()
@@ -577,7 +433,7 @@ class OrganisationOfficeList(ListCreateAPIView):
 		context['breadcrumbs'] = [
 			{
 				'label': _("Organisations"),
-				'url': reverse('organisation-list')
+				'url': reverse('organisation_list')
 			},
 			{
 				'label': _(u"%s" % self.parent_object),
@@ -588,7 +444,7 @@ class OrganisationOfficeList(ListCreateAPIView):
 					{
 						'label': _("Detail"),
 						'url': reverse(
-							'organisation-detail',
+							'organisation_detail',
 							kwargs={
 								'pk': self.parent_object.pk
 							}
@@ -648,7 +504,7 @@ class OrganisationOfficeList(ListCreateAPIView):
 class OfficeList(ListCreateAPIView):
 	renderer_classes = [TemplateHTMLRenderer, ] + api_settings.DEFAULT_RENDERER_CLASSES
 	model = Location
-	serializer_class = LocationSerializer
+	serializer_class = OfficeSerializer
 
 	def get_queryset(self):
 		queryset = super(OfficeList, self).get_queryset()
@@ -667,17 +523,11 @@ class OfficeList(ListCreateAPIView):
 				# 'type': "string",
 			},
 			{
-				'name': "organisation"
-			},
-			{
 				'name': "country",
 			},
 			{
 				'name': "ancestors",
 			},
-			{
-				'name': "type",
-			}
 		]
 
 		context['table'] = table_from_list(
@@ -685,7 +535,7 @@ class OfficeList(ListCreateAPIView):
 			fields,
 			serializer.data
 		)
-		context['module_menu'] = menu(self.request.get_full_path())
+		context['module_menu'] = menu(self.request.path)
 		context['breadcrumbs'] = [
 			{
 				'label': _("Offices"),

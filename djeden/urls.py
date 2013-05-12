@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
-from .views.generic import Root
+from .views import Root
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -19,7 +19,6 @@ urlpatterns = patterns('',
 
 	url(r'^$', Root.as_view(), name='root'),
 	url(r'^projects/', include('projects.urls')),
-
 	url(r'^organisations/', include('organisations.urls')),
 
 	url(r'^login/$', 'django.contrib.auth.views.login', name="login"),

@@ -5,13 +5,15 @@ from django.forms.models import inlineformset_factory
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
 
-from djeden.views.generic import ListView
-from djeden.views.generic import DetailView
+from djeden.utils import table_from_list, detail_from_dict, table_from_qs
+from djeden.views import ListView
+from djeden.views import DetailView
 
 from rest_framework.response import Response
 
 from .models import Project, ProjectOrganisation, Task
 from .serializers import ProjectSerializer, TaskSerializer
+from .forms import ProjectForm, TaskForm
 
 
 def menu():
@@ -21,11 +23,16 @@ def menu():
 			'items': [
 				{
 					'label': _("List"),
-					'url': reverse('project-list'),
+					'url': reverse('project_list'),
 				},
 				{
 					'label': _("New"),
-					'url': reverse('project-list', kwargs={'url_method': "create"}),
+					'url': reverse(
+						'project_list',
+						kwargs={
+							'url_method': "create"
+						}
+					),
 				},
 				{
 					'label': _("Map"),
@@ -71,15 +78,11 @@ def menu():
 			'label': _("Partner Organisations"),
 			'items': [
 				{
+					'label': _("List"),
+					'url': "",
+				},
+				{
 					'label': _("New"),
-					'url': "",
-				},
-				{
-					'label': _("List All"),
-					'url': "",
-				},
-				{
-					'label': _("Search"),
 					'url': "",
 				},
 				{
@@ -92,11 +95,11 @@ def menu():
 			'label': _("Themes"),
 			'items': [
 				{
-					'label': _("New"),
+					'label': _("List"),
 					'url': "",
 				},
 				{
-					'label': _("List All"),
+					'label': _("New"),
 					'url': "",
 				},
 			]
@@ -105,11 +108,11 @@ def menu():
 			'label': _("Activity Types"),
 			'items': [
 				{
-					'label': _("New"),
+					'label': _("List"),
 					'url': "",
 				},
 				{
-					'label': _("List All"),
+					'label': _("New"),
 					'url': "",
 				},
 			]
@@ -129,33 +132,6 @@ def menu():
 		},
 	]
 
-class ProjectForm(forms.ModelForm):
-	class Meta:
-		model = Project
-		exclude = ('organisations', )
-		widgets = {
-			'hazards': forms.CheckboxSelectMultiple(),
-			'hfas': forms.CheckboxSelectMultiple(),
-			'themes': forms.CheckboxSelectMultiple(),
-			'sectors': forms.CheckboxSelectMultiple(),
-		}
-
-	def __init__(self, *args, **kwargs):
-		super(ProjectForm, self).__init__(*args, **kwargs)
-		self.fields['hazards'].help_text = ""
-		self.fields['hfas'].help_text = ""
-		self.fields['themes'].help_text = ""
-		self.fields['sectors'].help_text = ""
-
-	def save(self, force_insert=False, force_update=False, commit=True):
-		project = super(ProjectForm, self).save(commit=False)
-
-		if commit:
-			project.save()
-			self.save_m2m()
-
-		return project
-
 
 class ProjectOrganisationForm(forms.ModelForm):
 	class Meta:
@@ -166,14 +142,37 @@ class ProjectList(ListView):
 	model = Project
 	serializer_class = ProjectSerializer
 	form_class = ProjectForm
+	fields = [
+		'name',
+		'code',
+		'sectors',  # list
+		'countries',  # list
+		'hazards',  # list
+		'themes',  # list
+		'start_date',
+		'end_date',
+		'organisations',  # list
+	]
 
 	def get_context_data(self, *args, **kwargs):
 		context = super(ProjectList, self).get_context_data(*args, **kwargs)
-		context['menu'] = menu()
+
+		context['module_menu'] = menu()
+		context['breadcrumbs'] = [
+			{
+				'label': _("Projects"),
+			},
+		]
+		context['table'] = table_from_qs(
+			self.object_list,
+			self.fields,
+		)
+		context['form_action'] = reverse('project_list')
+
 		return context
 
 	def get_success_url(self):
-		return reverse('project-detail', kwargs={'pk': self.object.pk})
+		return reverse('project_detail', kwargs={'pk': self.object.pk})
 
 
 class ProjectDetail(DetailView):
@@ -187,7 +186,7 @@ class ProjectDetail(DetailView):
 		context['breadcrumbs'] = [
 			{
 				'label': _("Projects"),
-				'url': reverse('project-list')
+				'url': reverse('project_list')
 			},
 			{
 				'label': _(u"%s" % self.object),
@@ -206,7 +205,10 @@ class ProjectDetail(DetailView):
 					},
 					{
 						'label': _("Tasks"),
-						'url': reverse('project-task-list', kwargs={'pk': self.object.pk}),
+						'url': reverse(
+							'project_task_list',
+							kwargs={'pk': self.object.pk}
+						),
 					},
 					{
 						'label': _("Documents"),
@@ -220,16 +222,12 @@ class ProjectDetail(DetailView):
 				]
 			}
 		]
-		context['menu'] = menu()
+		context['module_menu'] = menu()
+		context['data'] = detail_from_dict(self.model, self.serializer_class(self.object).data)
 		return context
 
 	def get_success_url(self):
-		return reverse('project-detail', kwargs={'pk': self.object.pk})
-
-
-class TaskForm(forms.ModelForm):
-	class Meta:
-		model = Task
+		return reverse('project_detail', kwargs={'pk': self.object.pk})
 
 
 class TaskList(ListView):
@@ -239,9 +237,19 @@ class TaskList(ListView):
 	model = Task
 	serializer_class = TaskSerializer
 	form_class = TaskForm
+	fields = [
+		"name",
+		"task_type",
+		"priority",
+		"severity",
+		"resolution",
+		"created",
+		"modified",
+	]
 
 	def get_queryset(self):
-		return Task.objects.filter(project_id=self.kwargs['pk'])
+		project = get_object_or_404(Project, pk=self.kwargs['pk'])
+		return Task.objects.filter(project=project)
 
 	def get_context_data(self, *args, **kwargs):
 		context = super(TaskList, self).get_context_data(*args, **kwargs)
@@ -249,7 +257,7 @@ class TaskList(ListView):
 		context['breadcrumbs'] = [
 			{
 				'label': _("Projects"),
-				'url': reverse('project-list')
+				'url': reverse('project_list')
 			},
 			{
 				'label': _(u"%s" % context['project']),
@@ -259,7 +267,7 @@ class TaskList(ListView):
 				'menu': [
 					{
 						'label': _("Detail"),
-						'url': reverse('project-detail', kwargs={'pk': self.kwargs['pk']}),
+						'url': reverse('project_detail', kwargs={'pk': self.kwargs['pk']}),
 					},
 					{
 						'label': _("Organisations"),
@@ -283,6 +291,8 @@ class TaskList(ListView):
 			}
 		]
 		context['menu'] = menu()
+
+		context['table'] = table_from_list(Task, self.fields, context['serialized_data'])
 		return context
 
 

@@ -18,6 +18,7 @@ class Task(models.Model):
 	task_type = models.IntegerField(
 		choices=TYPES,
 		default=0,
+		verbose_name=_("Type"),
 	)
 
 	PRIORITIES = (

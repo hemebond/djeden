@@ -18,17 +18,27 @@ table.table {
 
 table.table thead .sorting,
 table.table thead .sorting_asc,
-table.table thead .sorting_desc,
-table.table thead .sorting_asc_disabled,
-table.table thead .sorting_desc_disabled {
+table.table thead .sorting_desc {
 	cursor: pointer;
 	*cursor: hand;
-	padding-right: 16px;
 }
 
-table.table thead .sorting { background: url(/static/img/icon-chevron-both.png) no-repeat 98%; }
-table.table thead .sorting_asc { background: url(/static/img/icon-chevron-up.png) no-repeat 98%; }
-table.table thead .sorting_desc { background: url(/static/img/icon-chevron-down.png) no-repeat 98%; }
+table.table thead .sorting i,
+table.table thead .sorting_asc i,
+table.table thead .sorting_desc i {
+	width: 14px;
+	height: 14px;
+	background-image: url("/static/libs/bootstrap-2.2.2/img/glyphicons-halflings.png");
+	background-position: 14px 14px;
+	background-repeat: no-repeat;
+	float: right;
+}
+table.table thead .sorting_asc i {
+	background-position: -288px -120px;
+}
+table.table thead .sorting_desc i {
+	background-position: -313px -119px;
+}
 
 table.dataTable th:active {
 	outline: none;

@@ -1,9 +1,10 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 
 from unocha.models import Sector
 
 from kapua.locations.models import Location
-from places.models import Country
+from kapua.locations.models import Country
 
 
 class OrganisationType(models.Model):
@@ -29,12 +30,15 @@ class Organisation(models.Model):
 	acronym = models.CharField(
 		max_length=16,
 		help_text="Acronym of the organisation.",
+		blank=True,
 	)
 	orgtype = models.ForeignKey(
 		OrganisationType,
 		verbose_name="type",
+		blank=True,
+		null=True,
 	)
-	website = models.URLField(blank=True, null=True)
+	website = models.URLField(blank=True)
 	sectors = models.ManyToManyField(Sector, blank=True, null=True)
 	country = models.ForeignKey(
 		Country,
@@ -47,6 +51,9 @@ class Organisation(models.Model):
 
 	def __unicode__(self):
 		return u"%s" % self.name
+
+	def get_absolute_url(self):
+		return reverse("organisation_detail", kwargs={'pk': self.pk})
 
 	class Meta:
 		ordering = ('name',)
