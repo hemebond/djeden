@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from .models import Project, ProjectOrganisation, Task
 from .serializers import ProjectSerializer, TaskSerializer
 from .forms import ProjectForm, TaskForm
+from .filters import ProjectFilter
 
 
 def menu():
@@ -35,7 +36,7 @@ def menu():
 					),
 				},
 				{
-					'label': _("Map"),
+					'label': _("Import"),
 					'url': "",
 				},
 			]
@@ -58,24 +59,7 @@ def menu():
 			]
 		},
 		{
-			'label': _("Import"),
-			'items': [
-				{
-					'label': _("Projects"),
-					'url': "",
-				},
-				{
-					'label': _("Project Organisations"),
-					'url': "",
-				},
-				{
-					'label': _("Project Locations"),
-					'url': "",
-				},
-			]
-		},
-		{
-			'label': _("Partner Organisations"),
+			'label': _("Project Organisations"),
 			'items': [
 				{
 					'label': _("List"),
@@ -141,12 +125,15 @@ class ProjectOrganisationForm(forms.ModelForm):
 class ProjectList(ListView):
 	model = Project
 	serializer_class = ProjectSerializer
+	filter_class = ProjectFilter
 	form_class = ProjectForm
+
 	fields = [
 		'name',
 		'code',
+		'implementer',
 		'sectors',  # list
-		'countries',  # list
+		'locations',  # list
 		'hazards',  # list
 		'themes',  # list
 		'start_date',
@@ -163,11 +150,11 @@ class ProjectList(ListView):
 				'label': _("Projects"),
 			},
 		]
-		context['table'] = table_from_qs(
-			self.object_list,
-			self.fields,
-		)
-		context['form_action'] = reverse('project_list')
+
+		if "table" in context:
+			context['table']['bulk_actions'] = [
+				("delete", _("Delete selected %s" % unicode(self.model._meta.verbose_name_plural.title()))),
+			]
 
 		return context
 
@@ -246,14 +233,16 @@ class TaskList(ListView):
 		"created",
 		"modified",
 	]
+	entity = Project
+	component = Task
 
 	def get_queryset(self):
-		project = get_object_or_404(Project, pk=self.kwargs['pk'])
+		project = get_object_or_404(Project, pk=self.kwargs['project_pk'])
 		return Task.objects.filter(project=project)
 
 	def get_context_data(self, *args, **kwargs):
 		context = super(TaskList, self).get_context_data(*args, **kwargs)
-		context['project'] = get_object_or_404(Project, pk=self.kwargs['pk'])
+		context['project'] = get_object_or_404(Project, pk=self.kwargs['project_pk'])
 		context['breadcrumbs'] = [
 			{
 				'label': _("Projects"),
@@ -267,7 +256,7 @@ class TaskList(ListView):
 				'menu': [
 					{
 						'label': _("Detail"),
-						'url': reverse('project_detail', kwargs={'pk': self.kwargs['pk']}),
+						'url': reverse('project_detail', kwargs={'pk': self.kwargs['project_pk']}),
 					},
 					{
 						'label': _("Organisations"),
@@ -290,9 +279,13 @@ class TaskList(ListView):
 				]
 			}
 		]
-		context['menu'] = menu()
+		context['module_menu'] = menu()
 
-		context['table'] = table_from_list(Task, self.fields, context['serialized_data'])
+		context['table'] = table_from_list(
+			context['serialized_data'],
+			Task,
+			self.fields,
+		)
 		return context
 
 

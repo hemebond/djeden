@@ -14,12 +14,12 @@ urlpatterns = patterns('projects.views',
 		name='project_detail'
 	),
 	url(
-		r'^(?P<pk>\d+)/tasks/(?:(?P<url_method>create)/)?$',
+		r'^(?P<entity_pk>\d+)/tasks/(?:(?P<url_method>create)/)?$',
 		TaskList.as_view(),
 		name='project_task_list'
 	),
 	url(
-		r'^(?P<project_pk>\d+)/tasks/(?P<pk>\d+)/$',
+		r'^(?P<entity_pk>\d+)/tasks/(?P<component_pk>\d+)/$',
 		TaskDetail.as_view(),
 		name='project_task_detail'
 	),

@@ -1,11 +1,12 @@
 {% extends template_extends|default:"base_module.html" %}
 
 {% load i18n %}
+{% load sekizai_tags %}
 
 {% block title %}form.html{% endblock %}
 
 {% block content %}
-	<form action="{{ form_action }}" method="POST" class="form-horizontal">
+	<form action="{{ form.html_action }}" method="POST" class="form-horizontal">
 		{% csrf_token %}
 
 		{% for field in form %}
@@ -18,4 +19,10 @@
 			</div>
 		</div>
 	</form>
+
+	{% addtoblock "js_ready" %}
+		$('form select[multiple]').chosen();
+	{% endaddtoblock %}
+	{% addtoblock "js" %}<script src="{{ STATIC_URL }}libs/chosen/chosen/chosen.jquery.min.js" type="text/javascript"></script>{% endaddtoblock %}
+	{% addtoblock "css" %}<link href="{{ STATIC_URL }}libs/chosen/chosen/chosen.css" rel="stylesheet">{% endaddtoblock %}
 {% endblock %}

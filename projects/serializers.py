@@ -5,11 +5,12 @@ from .models import Project, ProjectOrganisation, Task
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
 	pk = serializers.Field()
 	status = serializers.Field(source='status')
-	countries = serializers.ManyRelatedField()
+	locations = serializers.ManyRelatedField()
 	hazards = serializers.ManyRelatedField()
 	hfas = serializers.ManyRelatedField()
 	sectors = serializers.ManyRelatedField()
 	themes = serializers.ManyRelatedField()
+	implementer = serializers.Field()
 	organisations = serializers.HyperlinkedRelatedField(many=True, view_name="organisation_detail")
 
 	# start_date = serializers.DateTimeField()

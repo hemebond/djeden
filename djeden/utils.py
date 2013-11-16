@@ -1,7 +1,8 @@
 import json
 import re
 
-from django.db.models import fields
+from django.db.models.fields import FieldDoesNotExist
+from django.contrib.admin.util import label_for_field
 
 
 def table_from_list(object_list, model, field_list=[]):
@@ -9,8 +10,9 @@ def table_from_list(object_list, model, field_list=[]):
 		object_list is serialized data
 	"""
 
-	if not field_list:
-		field_list = model._meta.get_all_field_names()
+	if not field_list and object_list:
+		# field_list = model._meta.get_all_field_names()
+		field_list = object_list[0].keys()
 
 	table = {
 		'cols': [],
@@ -33,20 +35,21 @@ def table_from_list(object_list, model, field_list=[]):
 			# Get value from object dict
 			field_value = o[field_name]
 
+			# Get label from verbose name
+			try:
+				field_vname = label_for_field(field_name, model)
+			except AttributeError:
+				field_vname = field_name
+
 			# A field might not be a model field
 			try:
 				field = model._meta.get_field(field_name)
-
-				# Get label from verbose name
-				field_vname = unicode(field.verbose_name)
 
 				# Get field type
 				field_type = str(
 					re.search(r"(\w+)'>$", str(field.__class__)).group(1)
 				)
-			except fields.FieldDoesNotExist:
-				field_vname = field_name
-
+			except FieldDoesNotExist:
 				if isinstance(field_value, list):
 					field_type = "ManyToManyField"
 				else:
@@ -64,6 +67,9 @@ def table_from_list(object_list, model, field_list=[]):
 				'type': field_type,
 				'value': field_value,
 			})
+
+		if o['url']:
+			row['cells'][0]['url'] = o['url']
 
 		table['rows'].append(row)
 
@@ -85,7 +91,7 @@ def detail_from_dict(model, data, field_list=None):
 	for field in field_list:
 		try:
 			label = model._meta.get_field(field).verbose_name
-		except fields.FieldDoesNotExist:
+		except FieldDoesNotExist:
 			label = field
 
 		value = data[field]
@@ -164,75 +170,6 @@ def table_from_qs(queryset, field_list=[]):
 		is_first_object = False
 
 	return table
-
-
-
-
-
-# def table_from_qs(queryset, field_list=[], display_link=[]):
-# 	if not field_list:
-# 		field_list = queryset.model._meta.get_all_field_names()
-
-# 	# Temporarily convert from dict to list
-# 	# field_list = [field['name'] for field in field_list]
-
-# 	table = {
-# 		'cols': [],
-# 		'rows': [],
-# 	}
-
-# 	for idx, field in enumerate(field_list):
-# 		if type(field) == dict:
-# 			field = field['name']
-
-# 		try:
-# 			label = label_for_field(field, queryset.model)
-# 		except FieldDoesNotExist:
-# 			label = field
-
-# 		model_field = queryset.model._meta.get_field(field)
-
-# 		if model_field.rel and isinstance(model_field, fields.related.ManyToManyField):
-# 			field_type = "list"
-# 		elif isinstance(model_field, fields.EmailField):
-# 			field_type = "email"
-# 		else:
-# 			field_type = "str"
-
-# 		table['cols'].append({
-# 			'field': field,
-# 			'type': field_type,
-# 			'label': unicode(label),
-# 		})
-
-# 	for obj in queryset:
-# 		row = {
-# 			'pk': obj.pk,
-# 			'cells': [],
-# 		}
-
-# 		for idx, field in enumerate(field_list):
-# 			# Temporary transition fix
-# 			if isinstance(field, dict):
-# 				field = field['name']
-
-# 			cell = {
-# 				'field': field,
-# 				'type': table['cols'][idx]['type'],
-# 				'value': unicode(getattr(obj, field)),
-# 			}
-
-# 			if col[idx]['type'] == 'list':
-
-
-# 			if "name" == field and hasattr(obj, "url"):
-# 				cell.update({'url': getattr(obj, 'url')})
-
-# 			row['cells'].append(cell)
-
-# 		table['rows'].append(row)
-
-# 	return table
 
 
 class JSONEncoder(json.JSONEncoder):

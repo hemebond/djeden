@@ -14,6 +14,9 @@ class Theme(models.Model):
 	def __unicode__(self):
 		return u"%s" % self.name
 
+	class Meta:
+		ordering = ['name',]
+
 
 class Sector(models.Model):
 	"""
@@ -26,3 +29,6 @@ class Sector(models.Model):
 
 	def __unicode__(self):
 		return u"%s" % self.name
+
+	class Meta:
+		ordering = ['name',]

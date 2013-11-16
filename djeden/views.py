@@ -1,25 +1,20 @@
 import json
 
-# from django.core.exceptions import ImproperlyConfigured
 from django.shortcuts import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-# from django.forms import ModelForm
 
 from rest_framework.settings import api_settings
 from rest_framework.decorators import APIView
 from rest_framework.response import Response
-# from rest_framework import status
 from rest_framework.reverse import reverse as rest_reverse
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView
 
-# from django.views.generic.list import MultipleObjectTemplateResponseMixin
-# from django.views.generic.detail import SingleObjectTemplateResponseMixin
-# from django.views.generic.edit import ModelFormMixin
-
 from .mixins import SimpleFormMixin
 from .mixins import SimpleModelFormMixin
 from .utils import JSONEncoder
+
+from djeden.utils import table_from_list
 
 
 class Root(APIView):
@@ -34,6 +29,7 @@ class ListView(SimpleFormMixin, ListCreateAPIView):
 	renderer_classes = [TemplateHTMLRenderer, ] \
 	                 + api_settings.DEFAULT_RENDERER_CLASSES
 	model = None
+	fields = None
 	serializer_class = None
 	form_class = None
 	success_url = None
@@ -62,6 +58,31 @@ class ListView(SimpleFormMixin, ListCreateAPIView):
 
 		return names
 
+	def get_context_data(self, *args, **kwargs):
+		context = super(ListView, self).get_context_data(*args, **kwargs)
+
+		context['path'] = self.request.path
+
+		if hasattr(self, "serializer_class"):
+			context['serialized_data'] = self.serializer_class(self.object_list).data
+
+			context['json'] = json.dumps(
+				context['serialized_data'],
+				cls=JSONEncoder
+			)
+
+			context['table'] = table_from_list(
+				context['serialized_data'],
+				self.model,
+				self.fields,
+			)
+
+		if hasattr(self, "filter_class"):
+			context['filter'] = self.filter_class(self.request.GET)
+			context['filter'].form.html_action = self.request.path
+
+		return context
+
 	def get(self, request, *args, **kwargs):
 		format = request.accepted_renderer.format
 		method = kwargs.get('url_method', None)
@@ -72,13 +93,13 @@ class ListView(SimpleFormMixin, ListCreateAPIView):
 
 			queryset = self.get_queryset()
 			self.object_list = self.filter_queryset(queryset)
+			print self.object_list
+
 			form = self.get_form_class()(**self.get_form_kwargs())
-			serialized_data = self.serializer_class(self.object_list).data
+			form.html_action = self.request.path
 
 			context = self.get_context_data(
 				object_list=self.object_list,
-				serialized_data=serialized_data,
-				json=json.dumps(serialized_data, cls=JSONEncoder),
 				form=form,
 			)
 

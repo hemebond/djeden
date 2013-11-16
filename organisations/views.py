@@ -152,16 +152,6 @@ def menu(current_url=None):
 	return menu
 
 
-
-
-
-def cell(field,
-         label=None,
-         type="string",
-         url=None):
-	return
-
-
 class OfficeForm(forms.Form):
 	COUNTRIES = (
 		(x.id, x.name) for x in Country.objects.all()
@@ -179,6 +169,15 @@ class OrganisationList(ListView):
 	filter_class = OrganisationFilter
 	success_url = "/organisations/"
 
+	fields = [
+		"name",
+		"acronym",
+		"orgtype",
+		"sectors",
+		"country",
+		"website",
+	]
+
 	def get_success_url(self):
 		return reverse(
 			'organisation_detail',
@@ -188,52 +187,6 @@ class OrganisationList(ListView):
 	def get_context_data(self, *args, **kwargs):
 		context = super(OrganisationList, self).get_context_data(*args, **kwargs)
 
-		fields = [
-			{
-				'name': "name",
-				# 'verbose_name': "name",
-				# 'type': "string",
-			},
-			{
-				'name': "acronym",
-				# 'verbose_name': "acronym",
-				# 'type': "string",
-			},
-			{
-				'name': "orgtype",
-				# 'verbose_name': "type",
-				# 'type': "string",
-			},
-			{
-				'name': "sectors",
-				# 'verbose_name': "sectors",
-				# 'type': "list",
-			},
-			{
-				'name': "country",
-				# 'verbose_name': "home country",
-				# 'type': "string",
-			},
-			{
-				'name': "website",
-				# 'verbose_name': "website",
-				# 'type': "url",
-			},
-		]
-
-		print context['serialized_data']
-
-		context['table'] = table_from_list(
-			context['serialized_data'],
-			self.model,
-			fields,
-		)
-
-		# context['table'] = table_from_qs(
-		# 	self.object_list.queryset,
-		# 	field_list=fields
-		# )
-
 		context['module_menu'] = menu(self.request.path)
 		context['breadcrumbs'] = [
 			{
@@ -241,13 +194,14 @@ class OrganisationList(ListView):
 			},
 		]
 
-		context['form_action'] = reverse('organisation_list')
+		if "table" in context:
+			context['table']['bulk_actions'] = [
+				("delete", _("Delete selected %s" % unicode(self.model._meta.verbose_name_plural.title()))),
+			]
 
 		context['tabs'] = ['maps']
 
-		context['json'] = json.dumps(context['serialized_data'])
-
-		context['filter'] = OrganisationFilter(self.request.GET)
+		print context['filter'].data
 
 		return context
 
@@ -275,7 +229,7 @@ class OrganisationDetail(DetailView):
 
 		context['data'] = detail_from_dict(
 			self.model,
-			fields=[
+			field_list=[
 				"name",
 				"acronym",
 				"orgtype",

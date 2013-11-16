@@ -3,11 +3,22 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 
-#from tasks.models import Task
-import tasks
 from unocha.models import Sector, Theme
-from organisations.models import Sector, Organisation
-from kapua.locations.models import Country
+from organisations.models import Organisation
+from kapua.locations.models import Country, Location
+import tasks
+
+
+class Activity(models.Model):
+	"""
+	"""
+	name = models.CharField(max_length=64)
+
+	def __unicode__(self):
+		return u"%s" % self.name
+
+	class Meta:
+		ordering = ['name',]
 
 
 class Currency(models.Model):
@@ -21,6 +32,9 @@ class Currency(models.Model):
 	def __unicode__(self):
 		return u"%s" % self.name
 
+	class Meta:
+		ordering = ['name',]
+
 
 class Status(models.Model):
 	"""
@@ -32,12 +46,19 @@ class Status(models.Model):
 	def __unicode__(self):
 		return u"%s" % self.name
 
+	class Meta:
+		ordering = ['name',]
+
 
 class Hazard(models.Model):
 	name = models.CharField(max_length=64)
+	description = models.CharField(max_length=128)
 
 	def __unicode__(self):
 		return u"%s" % self.name
+
+	class Meta:
+		ordering = ['name',]
 
 
 class Hfa(models.Model):
@@ -51,16 +72,27 @@ class Hfa(models.Model):
 	def __unicode__(self):
 		return u"%s" % self.name
 
+	class Meta:
+		ordering = ['name',]
+
 
 class Project(models.Model):
 	name = models.CharField(max_length=128)
-	code = models.CharField(max_length=32)
+	code = models.CharField(
+		max_length=32,
+		blank=True,
+		null=True,
+	)
 	description = models.TextField(blank=True)
-	status = models.ForeignKey(Status)
+	status = models.ForeignKey(
+		Status,
+		blank=True,
+		null=True,
+	)
 	start_date = models.DateField(blank=True, null=True)
 	end_date = models.DateField(blank=True, null=True)
 	currency = models.ForeignKey(Currency, blank=True, null=True)
-	countries = models.ManyToManyField(Country, blank=True, null=True)
+	locations = models.ManyToManyField(Location, blank=True, null=True)
 	hazards = models.ManyToManyField(Hazard, blank=True, null=True)
 	hfas = models.ManyToManyField(Hfa, blank=True, null=True)
 
@@ -77,11 +109,23 @@ class Project(models.Model):
 		null=True
 	)
 
-	def __unicode__(self):
-		return u"%s" % self.name
+	def implementer(self):
+		try:
+			implementer_role = OrganisationRole.objects.get(name="Lead Implementer")
+			return ProjectOrganisation.objects.get(role=implementer_role)
+		except OrganisationRole.DoesNotExist, ProjectOrganisation.DoesNotExist:
+			return None
+
+	implementer.short_description = _("lead implementer")
 
 	def get_absolute_url(self):
 		return reverse('project_detail', kwargs={"pk": str(self.pk)})
+
+	def __unicode__(self):
+		return u"%s" % self.name
+
+	class Meta:
+		ordering = ['name',]
 
 
 class OrganisationRole(models.Model):
@@ -89,6 +133,9 @@ class OrganisationRole(models.Model):
 
 	def __unicode__(self):
 		return u"%s" % self.name
+
+	class Meta:
+		ordering = ['name',]
 
 
 class ProjectOrganisation(models.Model):
@@ -107,7 +154,7 @@ class Task(tasks.models.Task):
 
 class Contact(models.Model):
 	"""
-	An individual actively a part of a a relief effort.
+	An individual actively a part of a relief effort.
 	"""
 
 	user = models.ForeignKey(User, related_name="projects")

@@ -2,11 +2,28 @@
 {% load sekizai_tags %}
 
 {% if table.rows %}
+	{% if table.bulk_actions %}
+		<form action="{{ path }}" method="POST" class="form-inline">
+			<label for="id-bulk_action" class="control-label">
+				{% trans "Action" %}
+			</label>
+
+			<select id="id-bulk_action" name="bulk_action">
+				{% for action in table.bulk_actions %}
+					<option value="{{ action.0 }}">{{ action.1 }}</option>
+				{% endfor %}
+			</select>
+
+			<input type="submit" value="{% trans "Go" %}">
+
+			<p class="help-block">{{ bulk_action.help_text }}</p>
+	{% endif %}
+
 	<table class="table table-bordered table-striped datatable">
 		<thead>
 			<tr>
 				{% if table.bulk_actions %}
-					<th></th>
+					<th><input type="checkbox" value=""></th>
 				{% endif %}
 
 				{% for col in table.cols %}
@@ -18,7 +35,12 @@
 			{% for row in table.rows %}
 				<tr>
 					{% if table.bulk_actions %}
-						<td><input type="checkbox" value="{{ row.pk }}"></td>
+						<td>
+							<input
+								type="checkbox"
+								name="_selected_action"
+								value="{{ row.pk }}">
+						</td>
 					{% endif %}
 
 					{% for cell in row.cells %}
@@ -32,7 +54,7 @@
 
 							{% elif cell.type == "ManyToManyField" %}
 								<ul>
-									{{ cell.value.all|unordered_list }}
+									{{ cell.value|unordered_list }}
 								</ul>
 
 							{% else %}
@@ -48,6 +70,10 @@
 			{% endfor %}
 		</tbody>
 	</table>
+
+	{% if table.bulk_actions %}
+		</form>
+	{% endif %}
 {% else %}
 	<div>
 		{% trans "No records found" %}

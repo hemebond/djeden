@@ -2,171 +2,152 @@
 	{
 		"fields": {
 			"name": "Proposed"
-		}, 
-		"model": "projects.status", 
+		},
+		"model": "projects.status",
 		"pk": 1
-	}, 
+	},
 	{
 		"fields": {
 			"name": "Current"
-		}, 
-		"model": "projects.status", 
+		},
+		"model": "projects.status",
 		"pk": 2
-	}, 
+	},
 	{
 		"fields": {
 			"name": "Completed"
-		}, 
-		"model": "projects.status", 
+		},
+		"model": "projects.status",
 		"pk": 3
 	},
 
 	{
 		"fields": {
-			"name": "Avalanche"
+			"name": "Avalanche",
+			"description": "snow avalanche, snow slide"
 		},
 		"model": "projects.hazard",
 		"pk": 1
 	},
 	{
 		"fields": {
-			"name": "Cold"
+			"name": "Cold Wave",
+			"description": "extreme weather, extreme temperature, cold temperatures"
 		},
 		"model": "projects.hazard",
 		"pk": 2
 	},
 	{
 		"fields": {
-			"name": "Wave"
+			"name": "Cyclone",
+			"description": "hurricane, tropical storm, tropical depression, typhoon"
 		},
 		"model": "projects.hazard",
 		"pk": 3
 	},
 	{
 		"fields": {
-			"name": "Cyclone"
+			"name": "Drought",
+			"description": "deficiency of precipitation, desertification, pronounced absence of rainfall"
 		},
 		"model": "projects.hazard",
 		"pk": 4
 	},
 	{
 		"fields": {
-			"name": "Drought"
+			"name": "Earthquake",
+			"description": "seismic, tectonic"
 		},
 		"model": "projects.hazard",
 		"pk": 5
 	},
 	{
 		"fields": {
-			"name": "Earthquake"
+			"name": "Epidemic",
+			"description": "bubonic plague, cholera, dengue, non-pandemic diseases, typhoid"
 		},
 		"model": "projects.hazard",
 		"pk": 6
 	},
 	{
 		"fields": {
-			"name": "Epidemic"
+			"name": "Fire",
+			"description": "urban fire, bush fire, forest fire, uncontrolled fire, wildland fire"
 		},
 		"model": "projects.hazard",
 		"pk": 7
 	},
 	{
 		"fields": {
-			"name": "Fire"
+			"name": "Flood",
+			"description": "inundation; includes: flash floods"
 		},
 		"model": "projects.hazard",
 		"pk": 8
 	},
 	{
 		"fields": {
-			"name": "Flood"
+			"name": "Heat Wave",
+			"description": "extreme weather, extreme temperature, high temperatures"
 		},
 		"model": "projects.hazard",
 		"pk": 9
 	},
 	{
 		"fields": {
-			"name": "Heat"
+			"name": "Insect Infestation",
+			"description": "locust, plague, African bees"
 		},
 		"model": "projects.hazard",
 		"pk": 10
 	},
 	{
 		"fields": {
-			"name": "Wave"
+			"name": "Land Slide",
+			"description": "debris flow, mud flow, mud slide, rock fall, slide, lahar, rock slide and topple"
 		},
 		"model": "projects.hazard",
 		"pk": 11
 	},
 	{
 		"fields": {
-			"name": "Insect"
+			"name": "Storm Surge",
+			"description": "coastal flood, wave surge, wind setup"
 		},
 		"model": "projects.hazard",
 		"pk": 12
 	},
 	{
 		"fields": {
-			"name": "Infestation"
+			"name": "Technological",
+			"description": "Disaster chemical spill/leak, explosions, collapses, gas leaks, urban fire, oil spill, technical failure"
 		},
 		"model": "projects.hazard",
 		"pk": 13
 	},
 	{
 		"fields": {
-			"name": "Land"
+			"name": "Tornado",
+			"description": "waterspout, twister, vortex"
 		},
 		"model": "projects.hazard",
 		"pk": 14
 	},
 	{
 		"fields": {
-			"name": "Slide"
+			"name": "Tsunami",
+			"description": ""
 		},
 		"model": "projects.hazard",
 		"pk": 15
 	},
 	{
 		"fields": {
-			"name": "Storm"
+			"name": "Volcano",
+			"description": "crater, lava, magma, molten materials, pyroclastic flows, volcanic rock, volcanic ash"
 		},
 		"model": "projects.hazard",
 		"pk": 16
-	},
-	{
-		"fields": {
-			"name": "Surge"
-		},
-		"model": "projects.hazard",
-		"pk": 17
-	},
-	{
-		"fields": {
-			"name": "Technological"
-		},
-		"model": "projects.hazard",
-		"pk": 18
-	},
-	{
-		"fields": {
-			"name": "Tornado"
-		},
-		"model": "projects.hazard",
-		"pk": 19
-	},
-	{
-		"fields": {
-			"name": "Tsunami"
-		},
-		"model": "projects.hazard",
-		"pk": 20
-	},
-	{
-		"fields": {
-			"name": "Volcano"
-		},
-		"model": "projects.hazard",
-		"pk": 21
 	},
 
 	{

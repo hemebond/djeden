@@ -2,7 +2,6 @@
 
 {% load i18n %}
 {% load sekizai_tags %}
-{% load djeden_tags %}
 
 {% block title %}list.html{% endblock %}
 
@@ -10,7 +9,7 @@
 	{% ifnotequal filter None %}
 		<accordion>
 			<accordion-group heading="{% trans "Filter" %}">
-				<form action="{{ form_action }}" method="GET" class="">
+				<form id="id-filter_form" action="{{ filter.form.html_action }}" method="GET" class="form-horizontal">
 					<fieldset>
 						{% for field in filter.form %}
 							{% include "_form_field.html" %}
@@ -19,13 +18,14 @@
 						<div class="control-group">
 							<div class="controls">
 								<input type="submit" value="Search" class="btn btn-active">
+								<a href="{{ path }}" class="btn">Clear</a>
 							</div>
 						</div>
 					</fieldset>
 				</form>
 
 				{% addtoblock "js_ready" %}
-					//$('form select').chosen();
+					$('select[multiple]', "#id-filter_form").chosen();
 				{% endaddtoblock %}
 			</accordion-group>
 		</accordion>
@@ -36,7 +36,7 @@
 			<pane heading="{% trans "List" %}">
 				{% include "_table.html" %}
 
-				{% include "_datatables.html" %}
+				{#{% include "_datatables.html" %}#}
 
 				{% addtoblock "js_ready" %}
 					$('.datatable').dataTable(plugin_options.datatables);

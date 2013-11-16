@@ -1,12 +1,24 @@
 from django import forms
 
-from projects.models import Project, Task
+from .models import Project, Task
 
 
 class ProjectForm(forms.ModelForm):
 	class Meta:
 		model = Project
-		exclude = ('organisations', )
+		fields = [
+			'name',
+			'code',
+			'description',
+			'status',
+			'start_date',
+			'end_date',
+			'currency',
+			'hazards',
+			'hfas',
+			'sectors',
+			'themes',
+		]
 		# widgets = {
 		# 	'hazards': forms.CheckboxSelectMultiple(),
 		# 	'hfas': forms.CheckboxSelectMultiple(),
@@ -16,6 +28,7 @@ class ProjectForm(forms.ModelForm):
 
 	def __init__(self, *args, **kwargs):
 		super(ProjectForm, self).__init__(*args, **kwargs)
+
 		self.fields['hazards'].help_text = ""
 		self.fields['hfas'].help_text = ""
 		self.fields['themes'].help_text = ""

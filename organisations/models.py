@@ -34,12 +34,16 @@ class Organisation(models.Model):
 	)
 	orgtype = models.ForeignKey(
 		OrganisationType,
-		verbose_name="type",
+		verbose_name="organisation type",
 		blank=True,
 		null=True,
 	)
 	website = models.URLField(blank=True)
-	sectors = models.ManyToManyField(Sector, blank=True, null=True)
+	sectors = models.ManyToManyField(
+		Sector,
+		blank=True,
+		null=True
+	)
 	country = models.ForeignKey(
 		Country,
 		verbose_name="home country",

@@ -3,7 +3,7 @@
 {% else %}
 	<div class="control-group {% if field.errors %}error{% endif %}">
 		<label for="{{ field.auto_id }}" class="control-label">
-			{{ field.label }}
+			{{ field.label|title }}
 		</label>
 		<div class="controls">
 			{{ field }}
